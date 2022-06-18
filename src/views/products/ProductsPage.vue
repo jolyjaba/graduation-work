@@ -19,14 +19,15 @@
               <ion-card-title>{{ item.name }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              {{ item.description }}
-              <br />
-              <ion-text color="primary" class="price">
-                {{ item.price }} ₸
+              <ion-text color="dark">
+                <h3>{{ item.description }}</h3>
               </ion-text>
-              <ion-button class="aa">
+              <ion-text color="dark">
+                <h1>{{ item.price }} ₸</h1>
+              </ion-text>
+              <ion-button expand="block" @click="onAddToBasket(item)">
                 <ion-icon slot="start" :ios="cartOutline" :md="cartSharp" />
-                add
+                Добавить
               </ion-button>
             </ion-card-content>
           </ion-card>
@@ -57,44 +58,32 @@ import {
   IonCardContent,
 } from "@ionic/vue";
 import { cartOutline, cartSharp } from "ionicons/icons";
-import axios from "axios";
+import { onMounted, ref } from "vue";
+import api from "@/api";
 import { useRoute } from "vue-router";
-import { onMounted, ref, defineProps } from "vue";
-
-const route = useRoute();
-const $axios = axios.create({
-  baseURL: "http://localhost:8080",
-});
 
 interface IProduct {
-  id: number;
-  name: string;
-  description: string;
-  category: string;
-  price: number;
-  photo: string;
+  id: number
+  name: string
+  description: string
+  category: string
+  price: number
+  photo: string
+  table: number
 }
+
+const route = useRoute()
 
 const items = ref<IProduct[]>([]);
 
-defineProps<{ id: string }>()
-
 onMounted(async () => {
-  const { data } = await $axios.get(route.path);
+  const { data } = await api.get<IProduct[]>(`/api/products/${route.params.id}`);
   items.value = data;
 });
+
+const onAddToBasket = async (item: IProduct) => {
+  const { table, id } = item
+  localStorage.setItem('table', String(table))
+  await api.post('/api/basket', { productId: id, table })
+}
 </script>
-
-<style scoped>
-.aa {
-  position: absolute;
-  left: 200px;
-  bottom: 10px;
-}
-
-.price {
-  color: rgb(0, 0, 0);
-  font-size: 24px;
-  font-weight: 400;
-}
-</style>

@@ -13,10 +13,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/ScanPage.vue"),
   },
   {
-    path: "/api/products/:id",
+    path: "/products/:id",
     name: "Products",
     component: () => import("@/views/products/ProductsPage.vue"),
   },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: () => import('@/views/CartPage.vue')
+  }
 ];
 
 const router = createRouter({

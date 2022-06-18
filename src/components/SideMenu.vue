@@ -34,7 +34,7 @@
           <ion-label>Отсканировать QR</ion-label>
         </ion-item>
 
-        <ion-item button lines="none">
+        <ion-item button href="/cart" lines="none">
           <ion-icon slot="start" :ios="basketOutline" :md="basketSharp" />
           <ion-label>Корзина</ion-label>
         </ion-item>
@@ -52,12 +52,7 @@
     <ion-footer>
       <ion-toolbar>
         <ion-row class="ion-justify-content-center">
-          <ion-button
-            expand="block"
-            size="small"
-            fill="solid"
-            color="secondary"
-          >
+          <ion-button expand="block" size="small" fill="solid" color="secondary">
             rus
           </ion-button>
           <ion-button expand="block" size="small" fill="solid" color="primary">

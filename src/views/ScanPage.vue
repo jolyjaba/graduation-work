@@ -27,11 +27,14 @@ import {
 } from "@ionic/vue";
 import { QrStream } from "vue3-qr-reader";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+
 const onDecode = (decodedString: string) => {
   console.log(decodedString);
   if (decodedString) {
-    router.push(decodedString);
+    const id = decodedString.split('/').pop()
+    router.push({ name: 'Products', params: { id } });
   }
 };
 </script>
