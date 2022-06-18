@@ -43,21 +43,16 @@
       <ion-list>
         <ion-list-header>Labels</ion-list-header>
 
-        <ion-item v-for="(label, index) in labels" lines="none" :key="index">
+        <ion-item v-for="(label, index) in labels" lines="none" :href="label.href" :key="index">
           <ion-icon slot="start" :ios="bookmarkOutline" :md="bookmarkSharp" />
-          <ion-label>{{ label }}</ion-label>
+          <ion-label>{{ label.label }}</ion-label>
         </ion-item>
       </ion-list>
     </ion-content>
     <ion-footer>
       <ion-toolbar>
         <ion-row class="ion-justify-content-center">
-          <ion-button
-            expand="block"
-            size="small"
-            fill="solid"
-            color="secondary"
-          >
+          <ion-button expand="block" size="small" fill="solid" color="secondary">
             rus
           </ion-button>
           <ion-button expand="block" size="small" fill="solid" color="primary">
@@ -102,5 +97,10 @@ import {
   basketOutline,
   basketSharp,
 } from "ionicons/icons";
-const labels = ["Рестораны", "Кафе", "Бары", "Фудкорты", "FAQ", "О нас"];
+const labels = [{ label: "Рестораны", href: '/restoraunts' },
+{ label: "Кафе", href: '/cafes' },
+{ label: "Бары", href: '/bar' },
+{ label: "Фудкорты", href: '/foodcord' },
+{ label: "FAQ", href: '/faq' },
+{ label: "О нас", href: '/about' }];
 </script>
