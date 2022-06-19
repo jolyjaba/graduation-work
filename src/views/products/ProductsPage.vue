@@ -55,7 +55,6 @@ import {
   IonButtons,
   IonTitle,
   IonMenuButton,
-  IonImg,
   IonIcon,
   IonCard,
   IonCardHeader,
