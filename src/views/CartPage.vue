@@ -23,22 +23,22 @@
                         <ion-text color="dark">
                             <h1>{{ item.price }} ₸</h1>
                         </ion-text>
-                        <ion-buttons slot="primary">
-                            <ion-button>
+                        <ion-buttons slot="end">
+                            <ion-button @click="onHandleCounter(item, ++item.count)">
                                 <ion-icon slot="icon-only" :ios="addCircleOutline" :md="addCircleSharp" />
                             </ion-button>
-                            <ion-button v-if="item.count > 1">
+                            {{ item.count }}
+                            <ion-button @click="onHandleCounter(item, --item.count)" v-if="item.count > 0">
                                 <ion-icon slot="icon-only" :ios="removeCircleOutline" :md="removeCircleSharp" />
                             </ion-button>
-                            <ion-button expand="block" @click="onRemoveFromBasket(item)">
-                                <ion-icon slot="start" :ios="trashBinOutline" :md="trailSignSharp" />
-                                Удалить все
+                            <ion-button v-if="item.count > 1" expand="block" @click="onRemoveProductFromBasket(item)">
+                                Убрать все
                             </ion-button>
                         </ion-buttons>
                     </ion-card-content>
                 </ion-card>
             </ion-list>
-            <ion-grid>
+            <ion-grid v-if="price">
                 <ion-row>
                     <ion-col>
                         <ion-button expand="block">Оформить на сумму {{ price }} ₸</ion-button>
@@ -74,7 +74,7 @@ import {
     IonCardContent,
 } from "@ionic/vue";
 import { onMounted, ref } from "vue";
-import { addCircleOutline, addCircleSharp, removeCircleOutline, removeCircleSharp, trashBinOutline, trailSignSharp } from "ionicons/icons";
+import { addCircleOutline, addCircleSharp, removeCircleOutline, removeCircleSharp } from "ionicons/icons";
 
 interface IBasketProduct {
     basketId: number
@@ -97,15 +97,27 @@ const items = ref<IBasketProduct[]>([])
 
 const price = ref(0)
 
-onMounted(async () => {
+const fetchProductsFromBasket = async () => {
     const tableId = localStorage.getItem('table')
     if (!tableId) return
     const { data } = await api.get<IBasketResponse>(`/api/basket/list/${tableId}`)
     items.value = data.products
     price.value = data.total
+}
+
+onMounted(async () => {
+    await fetchProductsFromBasket()
 })
 
-const onRemoveFromBasket = async (item: IBasketProduct) => {
-    await api.delete(`/api/basket/all/${item.table}`)
+const onHandleCounter = async (item: IBasketProduct, count: number) => {
+    const { productId, table } = item
+    await api.post('/api/basket', { productId, table, count })
+    await fetchProductsFromBasket()
+}
+
+const onRemoveProductFromBasket = async (item: IBasketProduct) => {
+    const { basketId } = item
+    await api.delete(`/api/basket/${basketId}`)
+    await fetchProductsFromBasket()
 }
 </script>
