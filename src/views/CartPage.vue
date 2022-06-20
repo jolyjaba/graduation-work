@@ -41,7 +41,9 @@
             <ion-grid v-if="price">
                 <ion-row>
                     <ion-col>
-                        <ion-button expand="block">Оформить на сумму {{ price }} ₸</ion-button>
+                        <ion-button @click="onRedirectToOrder" expand="block">
+                            Оформить на сумму {{ price }} ₸
+                        </ion-button>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -75,8 +77,9 @@ import {
 } from "@ionic/vue";
 import { onMounted, ref } from "vue";
 import { addCircleOutline, addCircleSharp, removeCircleOutline, removeCircleSharp } from "ionicons/icons";
+import { useRouter } from "vue-router";
 
-interface IBasketProduct {
+export interface IBasketProduct {
     basketId: number
     count: number
     category: string
@@ -119,5 +122,18 @@ const onRemoveProductFromBasket = async (item: IBasketProduct) => {
     const { basketId } = item
     await api.delete(`/api/basket/${basketId}`)
     await fetchProductsFromBasket()
+}
+
+const router = useRouter()
+
+const onRedirectToOrder = async () => {
+    try {
+        const table = localStorage.getItem('table')
+        if (!table) return
+        await api.post(`/api/place-order-basket-products/${table}`)
+        router.push('/order')
+    } catch (error) {
+        console.error(error);
+    }
 }
 </script>

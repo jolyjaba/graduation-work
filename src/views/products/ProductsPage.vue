@@ -14,7 +14,6 @@
         <ion-list inset>
           <ion-card v-for="item in items" :key="item.id">
             <img class="product__image" :src="item.photo" :alt="item.photo">
-            <!-- <ion-img :src="item.photo" /> -->
             <ion-card-header>
               <ion-card-subtitle>{{ item.category }}</ion-card-subtitle>
               <ion-card-title>{{ item.name }}</ion-card-title>
